@@ -1,0 +1,34 @@
+{
+ "hours_used": 48457,
+ "hours_excluded": 1677,
+ "r2_hourly": 0.64,
+ "r2_daily": 0.78,
+ "sim_r2_hourly": 0.55,
+ "sim_interval_coverage": 0.75,
+ "ranges": {
+  "temp_c": [
+   8.455225600000027,
+   40.882925400000026
+  ],
+  "humidity_pct": [
+   19.73810398924711,
+   97.60972229739922
+  ],
+  "wind_speed": [
+   0.44683402505129316,
+   6.702831812417704
+  ],
+  "blh_m": [
+   14.46119356,
+   3022.714128000004
+  ],
+  "rain_mm": [
+   0.0,
+   2.307643880000005
+  ]
+ },
+ "cv": "5-fold, whole 2-week blocks held out",
+ "suspect_start": "2025-10-20",
+ "study_start": "2020-01-02",
+ "study_end": "2025-10-19"
+}

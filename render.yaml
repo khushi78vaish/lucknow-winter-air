@@ -1,0 +1,12 @@
+# Deploys the app on Render (free web service). The database and model are committed, so no build step is needed.
+services:
+  - type: web
+    name: lucknow-winter-air
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/health
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.12.3"

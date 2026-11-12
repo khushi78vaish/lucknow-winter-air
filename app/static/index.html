@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Lucknow Winter Air</title>
+<meta name="description" content="Six years of hourly PM2.5 at Lalbagh, Lucknow, with the weather taken out.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 22 22'%3E%3Crect x='1' y='12' width='4' height='9' rx='1' fill='%230f1a20'/%3E%3Crect x='7' y='6' width='4' height='15' rx='1' fill='%230f1a20'/%3E%3Crect x='13' y='9' width='4' height='12' rx='1' fill='%230f1a20'/%3E%3Crect x='19' y='1' width='2' height='20' rx='1' fill='%23d8452f'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="/css/app.css">
+</head>
+<body>
+<header class="top">
+  <div class="top-in">
+    <a class="brand" href="#/overview" aria-label="Lucknow Winter Air, home">
+      <svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><rect x="1" y="12" width="4" height="9" rx="1"/><rect x="7" y="6" width="4" height="15" rx="1"/><rect x="13" y="9" width="4" height="12" rx="1"/><rect x="19" y="1" width="2" height="20" rx="1" class="b4"/></svg>
+      <span>Lucknow Winter Air</span>
+    </a>
+    <nav id="nav" aria-label="Views">
+      <a href="#/overview">Overview</a>
+      <a href="#/calendar">Calendar</a>
+      <a href="#/weather">Weather</a>
+      <a href="#/stations">Stations</a>
+      <a href="#/simulator">Simulator</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- ============ OVERVIEW ============ -->
+<section class="view" data-view="overview" hidden>
+  <div class="pagehead">
+    <div class="eyebrow">Overview</div>
+    <h1>Once the weather is taken out, Lucknow's winters are not getting cleaner.</h1>
+    <p class="lede">Winter smog depends on wind, rain and how deep the layer of mixing air is. This dashboard asks what is left of six years of PM2.5 readings at Lalbagh after a model has accounted for the weather.</p>
+  </div>
+
+  <div class="strip" id="kpis" aria-label="Key figures"></div>
+
+  <div class="grid two">
+    <article class="card">
+      <h2>Winter average, raw and weather-adjusted</h2>
+      <p class="sub">December to February, µg/m³. Adjusted means the same winter replayed under typical weather for each month and hour.</p>
+      <div class="chart h-md" id="ch-winters"></div>
+      <p class="read"><b>2021-22 looked like a big improvement</b> in the raw numbers (97). It was a well-ventilated winter. Adjusted, it sits at 105, and the next two winters are 117 and 108 before 2024-25 rises to 126.</p>
+    </article>
+    <article class="card">
+      <h2>Each year, 1 January to 19 October</h2>
+      <p class="sub">A like-for-like comparison. The last months of 2025 are left out because the sensor was unreliable.</p>
+      <div class="chart h-md" id="ch-yearly"></div>
+      <p class="read">2025 comes out higher than 2024 both raw (68 against 61) and adjusted (72 against 58). Adjusting widens the gap: 2024's weather was a little worse than typical and 2025's a little better.</p>
+    </article>
+  </div>
+
+  <article class="card">
+    <h2>Month by month</h2>
+    <p class="sub">Drag the handles under the chart to zoom. Monthly mean PM2.5, µg/m³.</p>
+    <div class="chart h-lg" id="ch-monthly"></div>
+  </article>
+
+  <article class="card">
+    <h2>What happened during the 2020 lockdown?</h2>
+    <p class="sub">The model was trained without the lockdown weeks, then asked what 25 March to 31 May should have looked like. Every other year gets the same test, to show how wrong the method is when nothing unusual happens.</p>
+    <div class="chart h-sm" id="ch-lockdown"></div>
+    <p class="read" id="lockdown-read"></p>
+  </article>
+</section>
+
+<!-- ============ CALENDAR ============ -->
+<section class="view" data-view="calendar" hidden>
+  <div class="pagehead">
+    <div class="eyebrow">Calendar</div>
+    <h1>About three winter days in four are Poor or worse.</h1>
+    <p class="lede">Every day of a year, coloured by the official CPCB category. Click any day to see its hours, and the weather behind them.</p>
+  </div>
+
+  <article class="card">
+    <div class="row-between">
+      <h2>Daily PM2.5 by category</h2>
+      <div class="chips" id="year-chips" role="group" aria-label="Year"></div>
+    </div>
+    <div class="legend" id="band-legend"></div>
+    <div class="scrollx"><div class="chart cal" id="ch-calendar"></div></div>
+    <p class="sub" id="cal-summary"></p>
+  </article>
+
+  <article class="card" id="day-card" hidden>
+    <div class="row-between"><h2 id="day-title">A single day</h2><button class="ghost" id="day-close" type="button">Close</button></div>
+    <p class="sub" id="day-sub"></p>
+    <div class="grid three">
+      <div><h3>PM2.5, µg/m³</h3><div class="chart h-sm" id="ch-day-pm"></div></div>
+      <div><h3>Boundary layer height, m</h3><div class="chart h-sm" id="ch-day-blh"></div></div>
+      <div><h3>Wind speed, m/s</h3><div class="chart h-sm" id="ch-day-wind"></div></div>
+    </div>
+  </article>
+
+  <article class="card">
+    <div class="row-between">
+      <h2>Hour of day against month</h2>
+      <div class="chips" id="hm-chips" role="group" aria-label="Year for the hour and month grid"></div>
+    </div>
+    <p class="sub">Average PM2.5 for each hour and month, India Standard Time.</p>
+    <div class="scrollx"><div class="chart h-lg wide" id="ch-hm"></div></div>
+    <p class="read" id="hm-read"></p>
+  </article>
+</section>
+
+<!-- ============ WEATHER ============ -->
+<section class="view" data-view="weather" hidden>
+  <div class="pagehead">
+    <div class="eyebrow">Weather</div>
+    <h1>Trapped air is dirtier air.</h1>
+    <p class="lede">When the layer of air near the ground is shallow, the same emissions mix into less volume. The model uses this, and the other weather it can see, to predict PM2.5 without knowing anything about traffic or burning.</p>
+  </div>
+
+  <div class="grid two">
+    <article class="card">
+      <h2>PM2.5 by boundary layer height</h2>
+      <p class="sub">November to January hours, split into eight equal groups by boundary layer height. µg/m³.</p>
+      <div class="chart h-md" id="ch-blh"></div>
+      <p class="read" id="blh-read"></p>
+    </article>
+    <article class="card">
+      <h2>What the model leans on</h2>
+      <p class="sub">How much accuracy is lost when one input is shuffled. Higher means the model needs it more.</p>
+      <div class="chart h-md" id="ch-imp"></div>
+      <p class="read"><b>Long-term trend</b> is the model's stand-in for everything that changed across years and is not weather, which includes emissions. Rain over the last three days, the hour of day and boundary layer height come next.</p>
+    </article>
+  </div>
+
+  <article class="card">
+    <div class="row-between">
+      <h2>Real PM2.5 against what the weather predicts</h2>
+      <div class="chips" id="exp-chips" role="group" aria-label="Winter"></div>
+    </div>
+    <p class="sub">Daily means. The model never saw the days it is predicting here: whole two-week blocks were held out during training.</p>
+    <div class="legend" id="exp-legend"></div>
+    <div class="chart h-lg" id="ch-exp"></div>
+    <p class="read" id="model-read"></p>
+  </article>
+</section>
+
+<!-- ============ STATIONS ============ -->
+<section class="view" data-view="stations" hidden>
+  <div class="pagehead">
+    <div class="eyebrow">Stations</div>
+    <h1>From 20 October 2025, Lalbagh's PM2.5 stops behaving like PM2.5.</h1>
+    <p class="lede">Fine particles (PM2.5) are a part of coarse ones (PM10), so the two should rise and fall together in a steady proportion. Lalbagh's proportion fell and its correlation weakened, while a second station showed no such change.</p>
+  </div>
+
+  <article class="card">
+    <h2>PM2.5 per unit of PM10, by month</h2>
+    <p class="sub">Slope of daily PM2.5 on PM10. The green band is the range of a working instrument. The red region is excluded from every other chart on this site.</p>
+    <div class="legend" id="st-legend"></div>
+    <div class="chart h-lg" id="ch-slope"></div>
+  </article>
+
+  <article class="card">
+    <h2>How closely they move together</h2>
+    <p class="sub">Correlation of daily PM2.5 with PM10, by month. 1 means perfect agreement.</p>
+    <div class="chart h-md" id="ch-corr"></div>
+  </article>
+
+  <article class="card">
+    <h2>November and December, 2024 against 2025</h2>
+    <p class="sub">Daily PM2.5 and PM10 averaged over the two months, µg/m³.</p>
+    <div class="scrollx"><table id="compare" class="tbl"></table></div>
+    <p class="read">Coarse particles agree at both stations. Fine particles do not: Lalbagh's PM2.5 fell more than twice as much as the other station's.</p>
+  </article>
+
+  <aside class="note">
+    <b>What this proves, and what it does not.</b> It is strong circumstantial evidence of an instrument fault, not a confirmed one. Only the station operator can confirm that. The second station is also an imperfect referee: its PM2.5 and Lalbagh's agreed poorly in parts of 2025. The strongest evidence is Lalbagh's PM2.5 stopping following Lalbagh's own PM10. Other explanations, such as a real change in local emissions, cannot be ruled out from public data alone.
+  </aside>
+</section>
+
+<!-- ============ SIMULATOR ============ -->
+<section class="view" data-view="simulator" hidden>
+  <div class="pagehead">
+    <div class="eyebrow">Simulator</div>
+    <h1>Change the weather and see what the model expects.</h1>
+    <p class="lede">A deliberately simple model that knows only the month, the hour and five weather readings. It shows how much of the air quality weather can explain. It is not a forecast.</p>
+  </div>
+
+  <div class="sim">
+    <article class="card controls">
+      <h2>Conditions</h2>
+      <div class="chips" id="presets" role="group" aria-label="Presets"></div>
+      <div class="field"><label for="in-month">Month</label><select id="in-month"></select></div>
+      <div class="field"><label for="in-hour">Hour of day <output id="o-hour"></output></label><input type="range" id="in-hour" min="0" max="23" step="1"></div>
+      <div class="field"><label for="in-blh_m">Boundary layer height <output id="o-blh_m"></output></label><input type="range" id="in-blh_m" min="0" max="1000" step="1"></div>
+      <div class="field"><label for="in-wind_speed">Wind speed <output id="o-wind_speed"></output></label><input type="range" id="in-wind_speed" step="0.1"></div>
+      <div class="field"><label for="in-temp_c">Temperature <output id="o-temp_c"></output></label><input type="range" id="in-temp_c" step="0.5"></div>
+      <div class="field"><label for="in-humidity_pct">Humidity <output id="o-humidity_pct"></output></label><input type="range" id="in-humidity_pct" step="1"></div>
+      <div class="field"><label for="in-rain_mm">Rain this hour <output id="o-rain_mm"></output></label><input type="range" id="in-rain_mm" step="0.1"></div>
+    </article>
+
+    <div class="result">
+      <article class="card">
+        <div class="eyebrow">Expected PM2.5</div>
+        <div class="big"><span id="res-val">–</span><small>µg/m³</small></div>
+        <p id="res-text" class="sub" aria-live="polite"></p>
+        <div class="gauge" id="gauge" aria-hidden="true"></div>
+        <div class="gauge-scale"><span>0</span><span>60</span><span>120</span><span>250</span><span>300+</span></div>
+        <p class="fine" id="res-fine"></p>
+      </article>
+      <div class="grid two">
+        <article class="card"><h3>Same conditions, different boundary layer</h3><div class="chart h-sm" id="ch-sw-blh"></div></article>
+        <article class="card"><h3>Same conditions, different wind</h3><div class="chart h-sm" id="ch-sw-wind"></div></article>
+      </div>
+      <p class="fine" id="sim-card"></p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot">
+  <div>
+    <h3>Data</h3>
+    <p>Hourly pollution from the Central Pollution Control Board's CCR portal (Lalbagh, site 277; B R Ambedkar University, site 5460). Weather from ERA5 reanalysis, Copernicus Climate Change Service (Hersbach et al., 2023, DOI 10.24381/cds.adbb2d47).</p>
+  </div>
+  <div>
+    <h3>Limits</h3>
+    <p>One monitoring station. ERA5 is a roughly 28 km grid cell, not a measurement at the station. CPCB data is provisional. Category colours follow CPCB bands for 24-hour averages. 1,677 hours of Lalbagh PM2.5 from 20 October 2025 are excluded.</p>
+  </div>
+  <div>
+    <h3>Code</h3>
+    <p>Notebooks, pipeline and API are in the project repository. Every figure on this page is read from the database through the API.</p>
+  </div>
+</footer>
+
+<script src="/vendor/echarts.min.js"></script>
+<script type="module" src="/js/app.js"></script>
+</body>
+</html>
