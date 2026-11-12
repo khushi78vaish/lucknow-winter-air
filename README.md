@@ -4,7 +4,7 @@
 
 I took six years of hourly PM2.5 readings from the Lalbagh monitoring station, took the weather out with a model, and built a dashboard to explore what was left.
 
-**[Live dashboard](https://lucknow-winter-air.onrender.com/)** · Python, SQL, scikit-learn, FastAPI, ECharts
+**[Live dashboard](https://lucknow-winter-air.onrender.com)** · Python, SQL, scikit-learn, FastAPI, ECharts
 
 <!-- Write one or two sentences here in your own words: why you picked Lucknow and what you wanted to find out. -->
 
